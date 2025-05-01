@@ -1,0 +1,131 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Issuer {
+  id   String @id @default(uuid())
+  name String
+
+  etfs ETF[]
+}
+
+model ETF {
+  id                 String   @id @default(uuid())
+  name               String
+  isin               String
+  issuerId           String
+  benchmark          String
+  assetClass         String
+  theme              String
+  inceptionDate      DateTime
+  investmentStrategy String
+  riskLevel          String
+  listingExchange    String
+  dividendPolicy     String
+  replicationMethod  String
+  replicationModel   String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  issuer            Issuer             @relation(fields: [issuerId], references: [id])
+  dailyInfo         EtfDailyInfo[]
+  creationUnits     CreationUnit[]
+  redemptionUnits   RedemptionUnit[]
+  dailyCompositions DailyComposition[]
+
+  @@index([isin])
+}
+
+model EtfDailyInfo {
+  etfId              String
+  infoDate           DateTime
+  aum                Decimal
+  shareOutstanding   Decimal
+  nav                Decimal
+  expenseRatio       Decimal
+  trackingError      Decimal
+  creationUnitSize   Int
+  redemptionUnitSize Int
+  estimatedCash      Decimal
+  derivedCash        Decimal
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  etf ETF @relation(fields: [etfId], references: [id])
+
+  @@id([etfId, infoDate])
+}
+
+model Security {
+  id        String   @id @default(uuid()) @map("security_id")
+  name      String
+  isin      String
+  type      String
+  sector    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creationUnits     CreationUnit[]
+  redemptionUnits   RedemptionUnit[]
+  dailyCompositions DailyComposition[]
+
+  @@index([isin])
+}
+
+model CreationUnit {
+  etfId      String
+  infoDate   DateTime
+  securityId String
+
+  numShares Decimal
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  etf      ETF      @relation(fields: [etfId], references: [id])
+  security Security @relation(fields: [securityId], references: [id])
+
+  @@id([etfId, infoDate, securityId])
+}
+
+model RedemptionUnit {
+  etfId      String
+  infoDate   DateTime
+  securityId String
+
+  numShares Decimal
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  etf      ETF      @relation(fields: [etfId], references: [id])
+  security Security @relation(fields: [securityId], references: [id])
+
+  @@id([etfId, infoDate, securityId])
+}
+
+model DailyComposition {
+  etfId      String
+  infoDate   DateTime
+  securityId String
+
+  numShares       Decimal
+  changeNumShares Decimal
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  etf      ETF      @relation(fields: [etfId], references: [id])
+  security Security @relation(fields: [securityId], references: [id])
+
+  @@id([etfId, infoDate, securityId])
+}

@@ -1,6 +1,6 @@
 {
   "name": "publicdataapi",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "This API fetches the data from ProjectX making it publicly available.",
   "homepage": "https://github.com/achhayapathak/PublicDataAPI#readme",
   "bugs": {
@@ -16,23 +16,30 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon",
-    "build": "tsc",
-    "start": "tsc && node dist/index.js",
+    "build": "prisma generate && tsc",
+    "start": "prisma migrate deploy && npm run build && node dist/index.js",
     "lint": "eslint . --ext .ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio",
+    "prisma:generate": "prisma generate"
   },
   "devDependencies": {
     "@eslint/js": "^9.24.0",
     "@types/express": "^5.0.1",
     "@types/node": "^22.14.0",
-    "dotenv": "^16.4.7",
     "eslint": "^9.24.0",
     "nodemon": "^3.1.9",
+    "prisma": "^6.7.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.29.0"
   },
   "dependencies": {
+    "@prisma/client": "^6.7.0",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0"
   }
 }
