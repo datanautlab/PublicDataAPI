@@ -24,7 +24,7 @@ model Issuer {
 model ETF {
   id                 String   @id @default(uuid())
   name               String
-  isin               String
+  isin               String   @unique
   issuerId           String
   benchmark          String
   assetClass         String
@@ -39,7 +39,7 @@ model ETF {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
-  issuer            Issuer             @relation(fields: [issuerId], references: [id])
+  issuer            Issuer             @relation(fields: [issuerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   dailyInfo         EtfDailyInfo[]
   creationUnits     CreationUnit[]
   redemptionUnits   RedemptionUnit[]
@@ -63,7 +63,7 @@ model EtfDailyInfo {
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
-  etf ETF @relation(fields: [etfId], references: [id])
+  etf ETF @relation(fields: [etfId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([etfId, infoDate])
 }
@@ -71,7 +71,7 @@ model EtfDailyInfo {
 model Security {
   id        String   @id @default(uuid()) @map("security_id")
   name      String
-  isin      String
+  isin      String   @unique
   type      String
   sector    String
   createdAt DateTime @default(now())
@@ -93,8 +93,8 @@ model CreationUnit {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  etf      ETF      @relation(fields: [etfId], references: [id])
-  security Security @relation(fields: [securityId], references: [id])
+  etf      ETF      @relation(fields: [etfId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  security Security @relation(fields: [securityId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([etfId, infoDate, securityId])
 }
@@ -108,8 +108,8 @@ model RedemptionUnit {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  etf      ETF      @relation(fields: [etfId], references: [id])
-  security Security @relation(fields: [securityId], references: [id])
+  etf      ETF      @relation(fields: [etfId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  security Security @relation(fields: [securityId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([etfId, infoDate, securityId])
 }
@@ -124,8 +124,8 @@ model DailyComposition {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  etf      ETF      @relation(fields: [etfId], references: [id])
-  security Security @relation(fields: [securityId], references: [id])
+  etf      ETF      @relation(fields: [etfId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  security Security @relation(fields: [securityId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([etfId, infoDate, securityId])
 }
