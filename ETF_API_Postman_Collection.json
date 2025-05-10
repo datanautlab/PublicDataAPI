@@ -1,0 +1,207 @@
+{
+  "info": {
+    "_postman_id": "f7a3b5c9-0e1d-4e2a-8f5f-5c8d1e6b8d1e",
+    "name": "Public Data API - ETF",
+    "description": "Collection for ETF API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Server Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}",
+          "host": ["{{base_url}}"]
+        },
+        "description": "Check if the server is up and running"
+      }
+    },
+    {
+      "name": "ETF Route Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/v1/etf",
+          "host": ["{{base_url}}"],
+          "path": ["v1", "etf"]
+        },
+        "description": "Check if the ETF route is working"
+      }
+    },
+    {
+      "name": "Get ETF Data",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/v1/etf/:isin",
+          "host": ["{{base_url}}"],
+          "path": ["v1", "etf", ":isin"],
+          "variable": [
+            {
+              "key": "isin",
+              "value": "US46434G1031",
+              "description": "ISIN of the ETF"
+            }
+          ]
+        },
+        "description": "Get basic data for an ETF by ISIN"
+      }
+    },
+    {
+      "name": "Get ETF Daily Info",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/v1/etf/daily_info/:isin?from=2023-01-01&to=2023-01-31",
+          "host": ["{{base_url}}"],
+          "path": ["v1", "etf", "daily_info", ":isin"],
+          "query": [
+            {
+              "key": "from",
+              "value": "2023-01-01",
+              "description": "Start date in YYYY-MM-DD format"
+            },
+            {
+              "key": "to",
+              "value": "2023-01-31",
+              "description": "End date in YYYY-MM-DD format"
+            }
+          ],
+          "variable": [
+            {
+              "key": "isin",
+              "value": "US46434G1031",
+              "description": "ISIN of the ETF"
+            }
+          ]
+        },
+        "description": "Get daily information for an ETF by ISIN with optional date range filtering"
+      }
+    },
+    {
+      "name": "Get ETF Daily Composition",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/v1/etf/daily_composition/:isin?from=2023-01-01&to=2023-01-31",
+          "host": ["{{base_url}}"],
+          "path": ["v1", "etf", "daily_composition", ":isin"],
+          "query": [
+            {
+              "key": "from",
+              "value": "2023-01-01",
+              "description": "Start date in YYYY-MM-DD format"
+            },
+            {
+              "key": "to",
+              "value": "2023-01-31",
+              "description": "End date in YYYY-MM-DD format"
+            }
+          ],
+          "variable": [
+            {
+              "key": "isin",
+              "value": "US46434G1031",
+              "description": "ISIN of the ETF"
+            }
+          ]
+        },
+        "description": "Get daily composition for an ETF by ISIN with optional date range filtering"
+      }
+    },
+    {
+      "name": "Get ETF Creation Unit",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/v1/etf/creation_unit/:isin?from=2023-01-01&to=2023-01-31",
+          "host": ["{{base_url}}"],
+          "path": ["v1", "etf", "creation_unit", ":isin"],
+          "query": [
+            {
+              "key": "from",
+              "value": "2023-01-01",
+              "description": "Start date in YYYY-MM-DD format"
+            },
+            {
+              "key": "to",
+              "value": "2023-01-31",
+              "description": "End date in YYYY-MM-DD format"
+            }
+          ],
+          "variable": [
+            {
+              "key": "isin",
+              "value": "US46434G1031",
+              "description": "ISIN of the ETF"
+            }
+          ]
+        },
+        "description": "Get creation unit information for an ETF by ISIN with optional date range filtering"
+      }
+    },
+    {
+      "name": "Get ETF Redemption Unit",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/v1/etf/redemption_unit/:isin?from=2023-01-01&to=2023-01-31",
+          "host": ["{{base_url}}"],
+          "path": ["v1", "etf", "redemption_unit", ":isin"],
+          "query": [
+            {
+              "key": "from",
+              "value": "2023-01-01",
+              "description": "Start date in YYYY-MM-DD format"
+            },
+            {
+              "key": "to",
+              "value": "2023-01-31",
+              "description": "End date in YYYY-MM-DD format"
+            }
+          ],
+          "variable": [
+            {
+              "key": "isin",
+              "value": "US46434G1031",
+              "description": "ISIN of the ETF"
+            }
+          ]
+        },
+        "description": "Get redemption unit information for an ETF by ISIN with optional date range filtering"
+      }
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string",
+      "description": "Base URL for the API"
+    }
+  ]
+}
