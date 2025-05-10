@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -14,18 +8,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model issuer {
-  id   String @id @default(uuid())
-  name String
-
-  etfs etf[]
-}
-
 model etf {
-  id                  String   @id @default(uuid())
+  id                  String              @id @default(uuid()) @db.Uuid
   name                String
-  isin                String   @unique
-  issuer_id           String
+  isin                String              @unique
+  issuer_id           String              @db.Uuid
   benchmark           String
   asset_class         String
   theme               String
@@ -36,20 +23,19 @@ model etf {
   dividend_policy     String
   replication_method  String
   replication_model   String
-  created_at          DateTime @default(now())
-  updated_at          DateTime @updatedAt
-
-  issuer             issuer              @relation(fields: [issuer_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  daily_info         etf_daily_info[]
-  creation_units     creation_unit[]
-  redemption_units   redemption_unit[]
-  daily_compositions daily_composition[]
+  created_at          DateTime            @default(now())
+  updated_at          DateTime            @updatedAt
+  creation_units      creation_unit[]
+  daily_compositions  daily_composition[]
+  issuer              issuer              @relation(fields: [issuer_id], references: [id], onDelete: Cascade)
+  daily_info          etf_daily_info[]
+  redemption_units    redemption_unit[]
 
   @@index([isin])
 }
 
 model etf_daily_info {
-  etf_id               String
+  etf_id               String   @db.Uuid
   info_date            DateTime
   aum                  Decimal
   share_outstanding    Decimal
@@ -62,70 +48,68 @@ model etf_daily_info {
   derived_cash         Decimal
   created_at           DateTime @default(now())
   updated_at           DateTime @updatedAt
-
-  etf etf @relation(fields: [etf_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  etf                  etf      @relation(fields: [etf_id], references: [id], onDelete: Cascade)
 
   @@id([etf_id, info_date])
 }
 
 model security {
-  id         String   @id @default(uuid())
-  name       String
-  isin       String   @unique
-  type       String
-  sector     String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
+  id                 String              @id @default(uuid()) @db.Uuid
+  name               String
+  isin               String              @unique
+  type               String
+  sector             String
+  created_at         DateTime            @default(now())
+  updated_at         DateTime            @updatedAt
   creation_units     creation_unit[]
-  redemption_units   redemption_unit[]
   daily_compositions daily_composition[]
+  redemption_units   redemption_unit[]
 
   @@index([isin])
 }
 
 model creation_unit {
-  etf_id      String
+  etf_id      String   @db.Uuid
   info_date   DateTime
-  security_id String
-
-  num_shares Decimal
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  etf      etf      @relation(fields: [etf_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  security security @relation(fields: [security_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  security_id String   @db.Uuid
+  num_shares  Decimal
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  etf         etf      @relation(fields: [etf_id], references: [id], onDelete: Cascade)
+  security    security @relation(fields: [security_id], references: [id], onDelete: Cascade)
 
   @@id([etf_id, info_date, security_id])
 }
 
 model redemption_unit {
-  etf_id      String
+  etf_id      String   @db.Uuid
   info_date   DateTime
-  security_id String
-
-  num_shares Decimal
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  etf      etf      @relation(fields: [etf_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  security security @relation(fields: [security_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  security_id String   @db.Uuid
+  num_shares  Decimal
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  etf         etf      @relation(fields: [etf_id], references: [id], onDelete: Cascade)
+  security    security @relation(fields: [security_id], references: [id], onDelete: Cascade)
 
   @@id([etf_id, info_date, security_id])
 }
 
 model daily_composition {
-  etf_id      String
-  info_date   DateTime
-  security_id String
-
+  etf_id            String   @db.Uuid
+  info_date         DateTime
+  security_id       String   @db.Uuid
   num_shares        Decimal
   change_num_shares Decimal
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
-
-  etf      etf      @relation(fields: [etf_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  security security @relation(fields: [security_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  etf               etf      @relation(fields: [etf_id], references: [id], onDelete: Cascade)
+  security          security @relation(fields: [security_id], references: [id], onDelete: Cascade)
 
   @@id([etf_id, info_date, security_id])
+}
+
+model issuer {
+  id   String @id @default(uuid()) @db.Uuid
+  name String
+  etf  etf[]
 }
