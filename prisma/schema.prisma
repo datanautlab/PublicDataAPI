@@ -9,7 +9,7 @@ datasource db {
 }
 
 model etf {
-  id                  String              @id @default(uuid()) @db.Uuid
+  id                  String              @id @default(dbgenerated("public.uuid_generate_v4()")) @db.Uuid
   name                String
   isin                String              @unique
   issuer_id           String              @db.Uuid
@@ -24,7 +24,7 @@ model etf {
   replication_method  String
   replication_model   String
   created_at          DateTime            @default(now())
-  updated_at          DateTime            @updatedAt
+  updated_at          DateTime            @default(now()) @updatedAt
   creation_units      creation_unit[]
   daily_compositions  daily_composition[]
   issuer              issuer              @relation(fields: [issuer_id], references: [id], onDelete: Cascade)
@@ -54,7 +54,7 @@ model etf_daily_info {
 }
 
 model security {
-  id                 String              @id @default(uuid()) @db.Uuid
+  id                 String              @id @default(dbgenerated("public.uuid_generate_v4()")) @db.Uuid
   name               String
   isin               String              @unique
   type               String
@@ -109,7 +109,7 @@ model daily_composition {
 }
 
 model issuer {
-  id   String @id @default(uuid()) @db.Uuid
+  id   String @id @default(dbgenerated("public.uuid_generate_v4()")) @db.Uuid
   name String
   etf  etf[]
 }

@@ -1,0 +1,15 @@
+export const etfSelect = {
+  name: true,
+  isin: true,
+  benchmark: true,
+  asset_class: true,
+  theme: true,
+  inception_date: true,
+  investment_strategy: true,
+  risk_level: true,
+  listing_exchange: true,
+  dividend_policy: true,
+  replication_method: true,
+  replication_model: true,
+  issuer: { select: { name: true } },
+} as const;

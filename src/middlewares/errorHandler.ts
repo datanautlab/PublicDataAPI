@@ -1,12 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ErrorRequestHandler } from "express";
+import { ErrorRequestHandler, Response } from "express";
 import { INTERNAL_SERVER_ERROR } from "../constants/http";
 import logger from "../config/logger";
+import { AppError } from "../utils/AppError";
+
+// App error handler
+const handleAppError = (err: AppError, res: Response) => {
+  return res.status(err.statusCode).json({
+    message: err.message,
+    errorCode: err.errorCode,
+  });
+};
+
 // Error handler middleware
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  logger.error(`PATH: ${req.path}`, { error: err });
+  logger.error(`{path: ${req.path}, message: ${err.message}}`);
 
-  res.status(INTERNAL_SERVER_ERROR).json({ message: "Something went wrong" });
+  if (err instanceof AppError) {
+    handleAppError(err, res);
+    return;
+  }
+
+  res.status(INTERNAL_SERVER_ERROR).json({ message: err.message });
   return;
 };
 
