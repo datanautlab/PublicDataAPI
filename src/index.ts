@@ -7,14 +7,15 @@ import { connectToDatabase } from "./config/db";
 import etfRouter from "./routes/etf.route";
 import { PORT } from "./constants/env";
 import { OK } from "./constants/http";
-import requestCount from "./middlewares/requestCount";
+import request from "./middlewares/request";
+import logger from "./config/logger";
 
 const app = express();
 
 app.use(urlencoded({ extended: true }));
 app.use(json());
 app.use(cors());
-app.use(requestCount);
+app.use(request);
 
 app.get("/", (req, res) => {
   res.status(OK).json({ msg: "Server is up and running" });
@@ -30,8 +31,8 @@ app.get("/metrics", async (req, res) => {
 
 // 404 handler
 app.use((req, res) => {
-  console.log(`404 - Not Found: ${req.method} ${req.originalUrl}`);
-  res.status(404).send("Endpoint not found");
+  logger.error(`404 - Not Found: ${req.method} ${req.originalUrl}`);
+  res.status(404).send("Not found");
 });
 
 app.use(errorHandler);
@@ -40,5 +41,5 @@ app.listen(PORT, async () => {
   await connectToDatabase();
   const collectDefaultMetrics = client.collectDefaultMetrics;
   collectDefaultMetrics();
-  console.log(`Server is listening at port ${PORT}`);
+  logger.info(`Server is listening at port ${PORT}`);
 });

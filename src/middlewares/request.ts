@@ -1,5 +1,6 @@
 import client from "prom-client";
 import { Request, Response, NextFunction } from "express";
+import logger from "../config/logger";
 
 const requestCounter = new client.Counter({
   name: "request_count",
@@ -17,7 +18,7 @@ const requestCount = (
 
   res.on("finish", () => {
     const endTime = Date.now();
-    console.log(`Request ${req.method} ${req.originalUrl} took ${endTime - startTime}ms`);
+    logger.info(`${req.method} ${req.originalUrl} - ${endTime - startTime}ms - ${res.statusCode}`, { label: "request-count" });
 
     requestCounter.inc({
       method: req.method,

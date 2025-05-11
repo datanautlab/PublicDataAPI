@@ -11,14 +11,7 @@ import {
 const etfRouter = Router();
 
 etfRouter.get("/", (req, res) => {
-  console.log("ETF route hit");
   res.status(OK).json({ msg: "ETF route" });
-});
-
-// Debug route
-etfRouter.get("/debug", (req, res) => {
-  console.log("ETF debug route hit");
-  res.status(OK).json({ msg: "ETF debug route works" });
 });
 
 // More specific routes first
