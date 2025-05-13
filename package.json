@@ -1,6 +1,6 @@
 {
   "name": "publicdataapi",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "This API fetches the data from ProjectX making it publicly available.",
   "homepage": "https://github.com/achhayapathak/PublicDataAPI#readme",
   "bugs": {

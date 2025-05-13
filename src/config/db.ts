@@ -8,7 +8,7 @@ export async function connectToDatabase() {
     await prisma.$connect();
     logger.info("Connected to the database");
   } catch (e) {
-    logger.error("Could not connect to the database", { error: e });
+    logger.error(`Could not connect to the database: ${e}`);
     process.exit(1);
   }
 }
