@@ -13,3 +13,29 @@ export const etfSelect = {
   replication_model: true,
   issuer: { select: { name: true } },
 } as const;
+
+export const etfDailyInfoSelect = {
+  info_date: true,
+  aum: true,
+  share_outstanding: true,
+  nav: true,
+  expense_ratio: true,
+  tracking_error: true,
+  creation_unit_size: true,
+  redemption_unit_size: true,
+  estimated_cash: true,
+  derived_cash: true,
+} as const;
+
+export const etfDailyCompositionSelect = {
+  info_date: true,
+  num_shares: true,
+  security: {
+    select: {
+      name: true,
+      type: true,
+      sector: true,
+      isin: true,
+    },
+  },
+} as const;
